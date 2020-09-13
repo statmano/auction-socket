@@ -1,7 +1,7 @@
 # auction-socket
 A websocket based auction system for friends to compete against each other (original purpose for fun times watching horse racing).
 
-## Overall Goal
+## Goal for Min Viable Product
 * Two users are able to use the app simulataneously via the browser.
 * Each user is assigned a bankroll amount ($100 default, should be able to edit though)
 * A list of items (horses in a race being the original purpose) that can be nominated
@@ -13,4 +13,4 @@ A websocket based auction system for friends to compete against each other (orig
 * Users bankrolls can never drop below zero
 * Both bankrolls combined can never be less than the amount of remaining items yet to be auctioned.
 
-WIP More to come
+WIP More to come for future features.
