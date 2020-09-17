@@ -247,7 +247,7 @@ $(function() {
 
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
-    log(data.username + ' joined');
+    log(data.username + ' joined. He currently has $' + data.bankroll);
     addParticipantsMessage(data);
   });
 
@@ -269,7 +269,7 @@ $(function() {
   });
   
   //Weird code I am testing out- by me I mean SOB
-  var bidcount = "furry";
+  var bidcount = -10;
   function bidInc (){
     console.log(bidcount + " stupid");
     //bidcount + 2;
@@ -281,7 +281,7 @@ $(function() {
   });
   
   socket.on('bidC2', function(data){
-    $('.auction').append(data);
+    $('.auction').append(data.userName + "has $" + data.bankRoll + " left.");
   })
 });
 

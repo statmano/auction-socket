@@ -29,7 +29,9 @@ io.on('connection', function (socket) {
   });
   
   socket.on('bidC', (data) => {
-    io.emit('bidC2', data);
+    socket.bankroll = socket.bankroll + data;
+    let upData = {bankRoll: socket.bankroll, userName: socket.username};
+    io.emit('bidC2', upData);
   });
 
   // when the client emits 'add user', this listens and executes
@@ -38,6 +40,7 @@ io.on('connection', function (socket) {
 
     // we store the username in the socket session for this client
     socket.username = username;
+    socket.bankroll = 100;
     ++numUsers;
     addedUser = true;
     socket.emit('login', {
@@ -46,7 +49,8 @@ io.on('connection', function (socket) {
     // echo globally (all clients) that a person has connected
     socket.broadcast.emit('user joined', {
       username: socket.username,
-      numUsers: numUsers
+      numUsers: numUsers,
+      bankroll: socket.bankroll
     });
   });
 
