@@ -4,16 +4,26 @@
   <meta charset="UTF-8">
   <title>TST Auction App</title>
   <link rel="stylesheet" href="style.css">
+  <link
+      id="favicon"
+      rel="icon"
+      href="https://cdn.glitch.com/cbbaf302-0438-4cec-ba9b-7ca89d280a8c%2Ficon-zehorse.png?v=1583176968974"
+      type="image/png"
+    />
 </head>
 <body>
   <ul class="pages">
     <li class="chat page">
+      <div class="auction">
+        <label for="numH"># of Horses</label>
+        <input type="number" id="numH" name="numH" min="2" max="20" />  
+        <button id="listSubmit">Submit</button>
+        <button id="bid">Bid</button>
+      </div>
       <div class="chatArea">
         <ul class="messages"></ul>
       </div>
-      <div class="auction">
-          <button id="bid">Click Me!</button>
-      </div>
+      
       
       <input class="inputMessage" placeholder="Type here..."/>
     </li>

@@ -33,6 +33,16 @@ io.on('connection', function (socket) {
     let upData = {bankRoll: socket.bankroll, userName: socket.username};
     io.emit('bidC2', upData);
   });
+  
+  let listColors = [['red', 'white'],['blue', 'white'],['white', 'black'],['yellow', 'black'],['green', 'white'],['black', 'gold'],['orange', 'black'],['pink', 'black'],['cyan', 'black'],['purple', 'white'],['gray', 'red'],['LawnGreen', 'black'],['brown', 'white'],['maroon', 'yellow'],['khaki', 'black'],['LightBlue', 'red'],['navy', 'white'],['green', 'yellow'],['blue', 'red'],['fuchsia', 'yellow'],['green', 'white'],['plum', 'navy']];
+  
+  socket.on('loadList', (data) => {
+    var horseButtons = "";
+    for (var j = 0; j < data; j++){
+     horseButtons += "<button class='list_button' id='b" + (j+1) + "' style='background-color: " + listColors[j][0] + "; color: " + listColors[j][1] + ";'> " + (j+1) + " </button>"; 
+     };
+    io.emit('listUpdate', horseButtons);
+  })
 
   // when the client emits 'add user', this listens and executes
   socket.on('add user', function (username) {
