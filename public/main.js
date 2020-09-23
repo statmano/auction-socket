@@ -270,6 +270,24 @@ $(function() {
   
   //Weird code I am testing out- by me I mean SOB
   var bidcount = -10;
+  
+
+  function listLoad (h){
+    //let h = $('#numH').val();
+    /* for (var j = 0; j < h; j++){
+      var horseButtons = "<button id='b" + (j+1) + "' style='background-color: " + listColors[j][0] + "; color: " + listColors[j][1] + ";'> " + (j+1) + " </button>";
+      $(".auction").append(horseButtons);
+    }
+    
+    // use this below on server side -9/20/2020-
+    var horseButtons = "";
+    for (var j = 0; j < h; j++){
+     horseButtons += "<button id='b" + (j+1) + "' style='background-color: " + listColors[j][0] + "; color: " + listColors[j][1] + ";'> " + (j+1) + " </button>"; 
+     }
+    console.log(horseButtons);*/
+    socket.emit('loadList', h);
+  }
+  
   function bidInc (){
     console.log(bidcount + " stupid");
     //bidcount + 2;
@@ -278,10 +296,19 @@ $(function() {
   
    $("#bid").click(function () {
     bidInc();
+    //listLoad(15); 
+  });
+  
+  $("#listSubmit").click(function () {
+    let listCount = $('#numH').val();
+    listLoad(listCount); 
   });
   
   socket.on('bidC2', function(data){
-    $('.auction').append(data.userName + "has $" + data.bankRoll + " left.");
-  })
+    $('.auction').append(data.userName + "has $" + data.bankRoll + " left. ");
+  });
+  
+  socket.on('listUpdate', function(data){
+    $('.auction').html(data);
+  });
 });
-
