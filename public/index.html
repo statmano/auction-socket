@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>TST Auction App</title>
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" media="(max-width: 804px)" href="style-m.css" />
+<link rel="stylesheet" media="(min-width: 804px)" href="style.css" />
   <link
       id="favicon"
       rel="icon"
@@ -15,11 +16,41 @@
   <ul class="pages">
     <li class="chat page">
       <div class="auction">
-        <label for="numH"># of Horses</label>
-        <input type="number" id="numH" name="numH" min="2" max="20" />  
-        <button id="listSubmit">Submit</button>
-        <button id="bid">Bid</button>
+        <div id="num_of_horses">
+          <label for="numH"># of Horses</label>
+          <input type="number" id="numH" name="numH" min="2" max="20" />  
+          <button id="listSubmit">Submit</button>
+        </div>
+        <div id="nominate_zone">
+          
+        </div>
+        <div id="bid_zone">
+          Current Nomination:
+          <div id="c_nom">
+            
+          </div>
+          <label for="bid_s">Bid</label>
+          <input type="number" id="bid_s" name="bid_s" step="1">
+          <button id="s_bid_button" type="submit">
+            Submit
+          </button>
+          
+        </div>
+        <div id="stableOne">
+          
+        </div>
+        <div id="stableTwo">
+          
+        </div>
+        <div id="bankrollOne">
+            
+        </div>
+        <div id="bankrollTwo">
+            
+        </div>
+        
       </div>
+      
       <div class="chatArea">
         <ul class="messages"></ul>
       </div>
