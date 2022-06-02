@@ -99,6 +99,7 @@ io.on('connection', function (socket) {
           io.emit('test_bid',{
             user: usersList[0],
             msg: " had the winning bid at $",
+            msg2: " please nominate a new horse",
             win: bid1,
             stable: "One",
             updatedBankroll: userBankrolls[0]
@@ -117,6 +118,7 @@ io.on('connection', function (socket) {
           io.emit('test_bid',{
             user: usersList[1],
             msg: " had the winning bid at $",
+            msg2: " please nominate a new horse",
             win: bid2,
             stable: "Two",
             updatedBankroll: userBankrolls[1]

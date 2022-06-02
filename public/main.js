@@ -356,13 +356,14 @@ var horseButtons = "";
   socket.on('nommove', (data) => {
     $("#b"+data.dataUp).remove();
     $("#c_nom").html(data.dataUp);
-    alert(data.thatarray);
+    //alert(data.thatarray);
   })
   
   socket.on('test_bid', (data) => {
     $("#c_nom").clone().appendTo("#stable" + data.stable);
-    $("#c_nom").html(data.user + data.msg + data.win);
+    $("#c_nom").html(data.user + data.msg + data.win + "<br>" + data.user + data.msg2);
     $("#bankroll" + data.stable).html("Current Bankroll: $" + data.updatedBankroll);
+    $("#bid_s").val('');
     console.log(data);
   });
   
@@ -387,4 +388,13 @@ var horseButtons = "";
       $("#stable" + data.user).append("<br>" + data.arr[i]);
       }
   });
+  
+  // If a user refreshes/leaves page in error
+  window.addEventListener("beforeunload", function (e) {
+    var confirmationMessage = 'It looks like you have been editing something. '
+                            + 'If you leave before saving, your changes will be lost.';
+
+    (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+    return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+});
 });
