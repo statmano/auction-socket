@@ -19,7 +19,7 @@ var usersList = [];
 var idsList = [];
 var bidList = {};
 var userBankrolls = [];
-var unusedList = [];
+var enteredList = [];
 var usedList = [];
 var removeNum;
 var indexRem;
@@ -37,31 +37,32 @@ io.on('connection', function (socket) {
   });
   
   
-  
+  // Take in the number of horses entered and puts into array, sets user bankrolls, removes remaining numbers
   socket.on('loadList', (data) => {
     removeNum = data;
     userBankrolls = [100, 100];
-    unusedList = [];
+    enteredList = [];
     for (var i = 0; i < removeNum; i++){
-      unusedList[i] = i+1;
+      enteredList[i] = i+1;
     }
     io.emit('removeHorses', {
       removeNum: removeNum,
       usernumber: socket.usernumber,
-      thatarray: unusedList
+      thatarray: enteredList
     });
   });
   
   socket.on('currentnom', (data) => {
     // First we take out the nominated horse from the unusedList array above
     let dataV = parseInt(data);
-    indexRem = unusedList.indexOf(dataV);
-       unusedList.splice(indexRem, 1);
+    indexRem = enteredList.indexOf(dataV);
+       enteredList.splice(indexRem, 1);
     // Then we send the nominated horses number (value) to all sockets
     let dataUp = data;
-    io.emit('nommove', {dataUp: dataUp, thatarray: unusedList});
+    io.emit('nommove', {dataUp: dataUp, thatarray: enteredList});
   });
   
+  // This is done when both users are logged in
   socket.on('stable', (data) => {
     let userOne = usersList[0];
     let userTwo = usersList[1];
@@ -109,7 +110,7 @@ io.on('connection', function (socket) {
             io.to(idsList[0]).emit('no_mas', {nomas: true});
             io.emit('leftovers', {
               user: "Two",
-              arr: unusedList
+              arr: enteredList
               }
             );
           }
@@ -128,7 +129,7 @@ io.on('connection', function (socket) {
             io.to(idsList[1]).emit('no_mas', {nomas: true});
             io.emit('leftovers', {
               user: "One",
-              arr: unusedList
+              arr: enteredList
               }
               );
           }
