@@ -27,14 +27,7 @@ var indexRem;
 io.on('connection', function (socket) {
   var addedUser = false;
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
-    });
-  });
+
   
   
   // Take in the number of horses entered and puts into array, sets user bankrolls, removes remaining numbers
@@ -167,19 +160,7 @@ io.on('connection', function (socket) {
       username: socket.username,
       bankroll: socket.bankroll
     });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers,
-      bankroll: socket.bankroll,
-    });
-  });
-
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.emit('typing', {
-      username: socket.username
-    });
+    
   });
 
   // when the client emits 'stop typing', we broadcast it to others
