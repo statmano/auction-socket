@@ -38,6 +38,7 @@ $(function () {
   var $currentInput = $usernameInput.focus();
 
   var socket = io();
+ 
 
   
 
@@ -120,13 +121,14 @@ $(function () {
     if (data.usernumber == "u1") {
       $("#stableOne").html(data.username + "'s Stable");
       $("#bankrollOne").html("Current Bankroll: $" + data.bankroll);
-    }
-    if (data.usernumber == "u2") {
+    } if (data.usernumber == "u2") {
       $("#stableTwo").html(data.username + "'s Stable");
       $("#bankrollTwo").html("Current Bankroll: $" + data.bankroll);
       socket.emit("stable", {
         high: "five",
       });
+    } if (data.usernumber != "u2" && data.usernumber != "u1") {
+      alert(`Sorry, the max number of players have logged in already. Please wait til their auction concludes.`)
     }
   });
 
@@ -141,12 +143,9 @@ $(function () {
     //log(data.username + " left");
     //addParticipantsMessage(data);
     //removeChatTyping(data);
+    alert(`${data.username} left, please refresh to start a new auction.`);
   });
 
-  // Whenever the server emits 'stop typing', kill the typing message
-  socket.on("stop typing", function (data) {
-    //removeChatTyping(data);
-  });
 
   // ----Horse Auction Code-----
   let listColors = [
@@ -217,13 +216,15 @@ $(function () {
   });
 
   $(".list_button").click(function () {
-    var nomNum = $(this).attr("value");
-    socket.emit("currentnom", nomNum);
+      var nomNum = $(this).attr("value");
+      socket.emit("currentnom", nomNum);
   });
 
   $("#s_bid_button").click(function () {
     var bidData = $("#bid_s").val();
     socket.emit("placed_bid", bidData);
+    $("#bid_input").hide();
+    $("#bid_confirm").show();
   });
 
   // ---------BELOW IS ALL OF THE FUNCTIONS DONE AFTER RECEIVING DATA BACK FROM THE SERVER-----------
@@ -237,6 +238,7 @@ $(function () {
     }
     $("#nominate_zone").show();
     $("#bid_zone").show();
+    $("#c_nom").html(`${data.firstbid} please nominate a horse`)
     $("#num_of_horses").hide();
     console.log(data.usernumber + "cough cough");
   });
@@ -256,7 +258,14 @@ $(function () {
   socket.on("nommove", (data) => {
     $("#b" + data.dataUp).remove();
     $("#c_nom").html(data.dataUp);
+    $("#bid_input").show();
+    $("#bid_confirm").hide();
+    
     //alert(data.thatarray);
+  });
+  
+  socket.on("doubleNom", (data) => {
+    alert(data.msg);
   });
 
   socket.on("test_bid", (data) => {
@@ -271,14 +280,20 @@ $(function () {
     );
     $("#bid_s").val("");
     console.log(data);
+    $("#bid_confirm").hide();
+    
   });
 
   socket.on("invalid_bid", (data) => {
     alert(data.msg);
+    $("#bid_confirm").hide();
+    $("#bid_input").show();
   });
 
   socket.on("tie_bid", (data) => {
     alert(data.msg);
+    $("#bid_confirm").hide();
+    $("#bid_input").show();
   });
 
   socket.on("no_mas", (data) => {
