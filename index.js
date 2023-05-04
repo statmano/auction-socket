@@ -23,6 +23,7 @@ var enteredList = [];
 var usedList = [];
 var removeNum;
 var indexRem;
+var nomOpen = true;
 
 io.on('connection', function (socket) {
   var addedUser = false;
@@ -41,18 +42,24 @@ io.on('connection', function (socket) {
     io.emit('removeHorses', {
       removeNum: removeNum,
       usernumber: socket.usernumber,
-      thatarray: enteredList
+      thatarray: enteredList,
+      firstbid: usersList[0]
     });
   });
   
   socket.on('currentnom', (data) => {
-    // First we take out the nominated horse from the unusedList array above
-    let dataV = parseInt(data);
-    indexRem = enteredList.indexOf(dataV);
-       enteredList.splice(indexRem, 1);
-    // Then we send the nominated horses number (value) to all sockets
-    let dataUp = data;
-    io.emit('nommove', {dataUp: dataUp, thatarray: enteredList});
+    if(nomOpen == true){
+      // First we take out the nominated horse from the unusedList array above
+      let dataV = parseInt(data);
+      indexRem = enteredList.indexOf(dataV);
+         enteredList.splice(indexRem, 1);
+      // Then we send the nominated horses number (value) to all sockets
+      let dataUp = data;
+      nomOpen = false;
+      io.emit('nommove', {dataUp: dataUp, thatarray: enteredList});
+    } else {
+      io.emit('doubleNom', {msg: `A horse has already been nominated.`});
+    }
   });
   
   // This is done when both users are logged in
@@ -90,6 +97,7 @@ io.on('connection', function (socket) {
         var bid2 = parseInt(bidList.u2);
         if (bid1 > bid2){
           userBankrolls[0] = userBankrolls[0] - bid1;
+          nomOpen = true;
           io.emit('test_bid',{
             user: usersList[0],
             msg: " had the winning bid at $",
@@ -109,6 +117,7 @@ io.on('connection', function (socket) {
           }
         } else if (bid2 > bid1){
           userBankrolls[1] = userBankrolls[1] - bid2;
+          nomOpen = true;
           io.emit('test_bid',{
             user: usersList[1],
             msg: " had the winning bid at $",
@@ -163,12 +172,7 @@ io.on('connection', function (socket) {
     
   });
 
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
-    });
-  });
+
 
   // when the user disconnects.. perform this
   socket.on('disconnect', function () {

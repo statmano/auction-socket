@@ -203,3 +203,11 @@ ul {
   font-size: 25px;
   padding: 10px;
 }
+
+#bid_input {
+  display: none;
+}
+
+#bid_confirm {
+  display: none;
+}
