@@ -23,7 +23,7 @@ var enteredList = [];
 var usedList = [];
 var removeNum;
 var indexRem;
-var nomOpen = true;
+var nomOpen;
 
 io.on('connection', function (socket) {
   var addedUser = false;
@@ -36,6 +36,7 @@ io.on('connection', function (socket) {
     removeNum = data;
     userBankrolls = [100, 100];
     enteredList = [];
+    nomOpen = true;
     for (var i = 0; i < removeNum; i++){
       enteredList[i] = i+1;
     }
@@ -57,9 +58,9 @@ io.on('connection', function (socket) {
       let dataUp = data;
       nomOpen = false;
       io.emit('nommove', {dataUp: dataUp, thatarray: enteredList});
-    } else {
+    } else if(nomOpen == false){
       io.emit('doubleNom', {msg: `A horse has already been nominated.`});
-    }
+    } else {}
   });
   
   // This is done when both users are logged in
