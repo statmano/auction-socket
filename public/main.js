@@ -107,10 +107,10 @@ $(function () {
     addParticipantsMessage(data); */
     console.log("Your socket number is " + data.usernumber);
     if (data.usernumber == "u1") {
-      $("#stableOne").html(data.username + "'s Stable");
+      $("#stableOne").html(`<h3>${data.username}'s Stable</h3><br>`);
       $("#bankrollOne").html("Current Bankroll: $" + data.bankroll);
     } if (data.usernumber == "u2") {
-      $("#stableTwo").html(data.username + "'s Stable");
+      $("#stableTwo").html(`<h3>${data.username}'s Stable</h3><br>`);
       $("#bankrollTwo").html("Current Bankroll: $" + data.bankroll);
       socket.emit("stable", {
         high: "five",
@@ -237,11 +237,11 @@ $(function () {
   socket.on("stableUpdate", (data) => {
     console.log(data);
     if (data.userOne == username) {
-      $("#stableTwo").html(data.userTwo + "'s Stable");
+      $("#stableTwo").html(`<h3>${data.userTwo}'s Stable</h3><br>`);
       $("#bankrollTwo").html("Current Bankroll: $" + data.bankrollTwo);
     }
     if (data.userTwo == username) {
-      $("#stableOne").html(data.userOne + "'s Stable");
+      $("#stableOne").html(`<h3>${data.userOne}'s Stable</h3><br>`);
       $("#bankrollOne").html("Current Bankroll: $" + data.bankrollOne);
     }
   });
@@ -261,7 +261,7 @@ $(function () {
 
   socket.on("test_bid", (data) => {
     var winNum = $("#c_nom").html();
-    $("#stable" + data.stable).append(`<br><p>$${data.win} for #${winNum}</p>`);
+    $("#stable" + data.stable).append(`#${winNum} <i>for</i> $${data.win}<br>`);
     $("#c_nom").html(
       data.user + data.msg + data.win + "<br>" + data.user + data.msg2
     );
@@ -295,8 +295,10 @@ $(function () {
   });
 
   socket.on("leftovers", (data) => {
+    $("#bankrollOne").hide();
+    $("#bankrollTwo").hide();
     for (var i = 0; i < data.arr.length; i++) {
-      $("#stable" + data.user).append("<br>" + data.arr[i]);
+      $("#stable" + data.user).append(`#${data.arr[i]} <i>for</i> $1<br>`);
     }
   });
 
