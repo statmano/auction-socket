@@ -68,18 +68,6 @@ $(function () {
   }
 
  
-  // Gets the color of a username through our hash function
-  function getUsernameColor(username) {
-    // Compute hash code
-    var hash = 7;
-    for (var i = 0; i < username.length; i++) {
-      hash = username.charCodeAt(i) + (hash << 5) - hash;
-    }
-    // Calculate color
-    var index = Math.abs(hash % COLORS.length);
-    return COLORS[index];
-  }
-
   // Keyboard events
 
   $window.keydown(function (event) {
@@ -169,14 +157,17 @@ $(function () {
     ["green", "yellow"],
     ["blue", "red"],
     ["fuchsia", "yellow"],
-    ["green", "white"],
-    ["plum", "navy"],
+    ["pink", "purple"],
+    ["DarkMagenta", "white"],
+    ["teal", "black"],
+    ["teal", "black"],
+    ["teal", "black"],
   ];
 
   var horseButtons = "";
   
   // Loops through amount of horses in race and presents the nomination buttons
-  for (var j = 0; j < 21; j++) {
+  for (var j = 0; j < 23; j++) {
     horseButtons +=
       "<button class='list_button' type='submit' value='" +
       (j + 1) +
@@ -233,7 +224,7 @@ $(function () {
     console.log(horsesTBR);
     console.log(data.thatarray);
     console.log(data);
-    for (var i = 21; i > horsesTBR; i--) {
+    for (var i = 24; i > horsesTBR; i--) {
       $("#b" + i).remove();
     }
     $("#nominate_zone").show();
@@ -269,9 +260,8 @@ $(function () {
   });
 
   socket.on("test_bid", (data) => {
-    $("#c_nom")
-      .clone()
-      .appendTo("#stable" + data.stable);
+    var winNum = $("#c_nom").html();
+    $("#stable" + data.stable).append(`<br><p>$${data.win} for #${winNum}</p>`);
     $("#c_nom").html(
       data.user + data.msg + data.win + "<br>" + data.user + data.msg2
     );
@@ -279,7 +269,7 @@ $(function () {
       "Current Bankroll: $" + data.updatedBankroll
     );
     $("#bid_s").val("");
-    console.log(data);
+    console.log(`${data.user} Horse ${winNum}: ${data.win}`);
     $("#bid_confirm").hide();
     
   });
