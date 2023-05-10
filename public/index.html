@@ -1,74 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>TST Auction App</title>
-<link rel="stylesheet" media="(max-width: 804px)" href="style-m.css" />
-<link rel="stylesheet" media="(min-width: 804px)" href="style.css" />
-  <link
+  <head>
+    <meta charset="UTF-8" />
+    <title>TST Auction App</title>
+    <link rel="stylesheet" media="(max-width: 804px)" href="style-m.css" />
+    <link rel="stylesheet" media="(min-width: 804px)" href="style.css" />
+    <link
       id="favicon"
       rel="icon"
       href="https://cdn.glitch.com/cbbaf302-0438-4cec-ba9b-7ca89d280a8c%2Ficon-zehorse.png?v=1583176968974"
       type="image/png"
     />
-</head>
-<body>
-  <ul class="pages">
-    <li class="chat page">
-      <div class="auction">
-        <div id="num_of_horses">
-          <label for="numH"># of Horses</label>
-          <input type="number" style="font-size:25px;" id="numH" name="numH" min="4" max="23" />  
-          <button id="numHSubmit">Submit</button>
-        </div>
-        <div id="nominate_zone">
-          
-        </div>
-        <div id="bid_zone">
-          
-          <div id="c_nom">
-            
+  </head>
+  <body>
+    <ul class="pages">
+      <li class="chat page">
+        <div class="auction">
+          <div id="num_of_horses">
+            <label for="numH"># of Horses</label>
+            <input
+              type="number"
+              style="font-size: 25px"
+              id="numH"
+              name="numH"
+              min="4"
+              max="23"
+            />
+            <button id="numHSubmit">Submit</button>
           </div>
-          <div id="bid_input">
-            <label for="bid_s">Bid</label>
-            <input type="number" id="bid_s" name="bid_s" step="1">
-            <button id="s_bid_button" type="submit">
-              Submit
+          <div id="nominate_zone"></div>
+          <div id="scratch_prompt">
+            Are there any scratches?<br /><button id="scratch_yes">Yes</button>
+            or <button id="scratch_no">No</button>
+          </div>
+          <div id="scratch_process">
+            Click all of the scratched horses. When finished, click <button id="scratchFinished">
+            Finished
             </button>
           </div>
-          <div id="bid_confirm">
-            You're bid has been placed.
+          <div id="bid_zone">
+            <div id="c_nom"></div>
+            <div id="bid_input">
+              <label for="bid_s">Bid</label>
+              <input type="number" id="bid_s" name="bid_s" step="1" />
+              <button id="s_bid_button" type="submit">Submit</button>
+            </div>
+            <div id="bid_confirm">You're bid has been placed.</div>
           </div>
-            
-          
+          <div id="stableOne" class="stables"></div>
+          <div id="stableTwo" class="stables"></div>
+          <div id="bankrollOne" class="stables"></div>
+          <div id="bankrollTwo" class="stables"></div>
         </div>
-        <div id="stableOne" class="stables">
-          
+      </li>
+      <li class="login page">
+        <div class="form">
+          <h3 class="title">What's your nickname?</h3>
+          <input class="usernameInput" type="text" maxlength="14" />
         </div>
-        <div id="stableTwo" class="stables">
-          
-        </div>
-        <div id="bankrollOne" class="stables">
-            
-        </div>
-        <div id="bankrollTwo" class="stables">
-            
-        </div>
-        
-      </div>
-      
-      
-    </li>
-    <li class="login page">
-      <div class="form">
-        <h3 class="title">What's your nickname?</h3>
-        <input class="usernameInput" type="text" maxlength="14" />
-      </div>
-    </li>
-  </ul>
+      </li>
+    </ul>
 
-  <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script type="module" src="/main.js"></script>
-</body>
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module" src="/main.js"></script>
+  </body>
 </html>
