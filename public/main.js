@@ -57,10 +57,6 @@ $(function () {
       socket.emit("add user", username);
     }
   }
-
- 
- 
-
  
   // Prevents input from having injected markup
   function cleanInput(input) {
@@ -131,7 +127,7 @@ $(function () {
     //log(data.username + " left");
     //addParticipantsMessage(data);
     //removeChatTyping(data);
-    alert(`${data.username} left, please refresh to start a new auction.`);
+    //alert(`${data.username} left, please refresh to start a new auction.`);
   });
 
 
@@ -166,7 +162,7 @@ $(function () {
 
   var horseButtons = "";
   
-  // Loops through amount of horses in race and presents the nomination buttons
+  // This creates ALL of the horse buttons prior to removing/scratching any
   for (var j = 0; j < 23; j++) {
     horseButtons +=
       "<button class='list_button' type='submit' value='" +
@@ -186,6 +182,7 @@ $(function () {
   var bidcount = -10;
   var toBePicked = [];
 
+  // Sends the server the number of horses ENTERED in this race (h)
   function listLoad(h) {
     socket.emit("loadList", h);
   }
@@ -204,6 +201,14 @@ $(function () {
   $("#numHSubmit").click(function () {
     let numHCount = $("#numH").val();
     listLoad(numHCount);
+  });
+  
+   $("#scratch_no, #scratchFinished").click(function () {
+    socket.emit('scratchGood', {});
+  });
+  
+  $("#scratch_yes").click(function () {
+    socket.emit('scratches', {});
   });
 
   $(".list_button").click(function () {
@@ -227,11 +232,23 @@ $(function () {
     for (var i = 24; i > horsesTBR; i--) {
       $("#b" + i).remove();
     }
+    $('#scratch_prompt').show();
     $("#nominate_zone").show();
+    //$("#bid_zone").show();
+    //$("#c_nom").html(`${data.firstbid} please nominate a horse`)
+    $("#num_of_horses").hide();
+  });
+  
+  socket.on('scratchTime', (data) => {
+    $("#scratch_prompt").hide();
+    $('#scratch_process').show();
+  });
+  
+  socket.on('auctionTime', (data) => {
+    $('#scratch_prompt').hide();
+    $('#scratch_process').hide();
     $("#bid_zone").show();
     $("#c_nom").html(`${data.firstbid} please nominate a horse`)
-    $("#num_of_horses").hide();
-    console.log(data.usernumber + "cough cough");
   });
 
   socket.on("stableUpdate", (data) => {
@@ -245,10 +262,15 @@ $(function () {
       $("#bankrollOne").html("Current Bankroll: $" + data.bankrollOne);
     }
   });
+  
+  socket.on("removeScratches", (data) => {
+    $("#b" + data.horse).remove();
+    console.log(data.elist);
+  })
 
   socket.on("nommove", (data) => {
     $("#b" + data.dataUp).remove();
-    $("#c_nom").html(data.dataUp);
+    $("#c_nom").html(`Horse #${data.dataUp}`);
     $("#bid_input").show();
     $("#bid_confirm").hide();
     
@@ -261,7 +283,7 @@ $(function () {
 
   socket.on("test_bid", (data) => {
     var winNum = $("#c_nom").html();
-    $("#stable" + data.stable).append(`#${winNum} <i>for</i> $${data.win}<br>`);
+    $("#stable" + data.stable).append(`${winNum} <i>for</i> $${data.win}<br>`);
     $("#c_nom").html(
       data.user + data.msg + data.win + "<br>" + data.user + data.msg2
     );

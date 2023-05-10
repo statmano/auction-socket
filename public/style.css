@@ -173,7 +173,6 @@ ul {
 #nominate_zone {
   display: none;
   grid-column: 1 / 3;
- 
 }
 
 #bid_s {
@@ -200,4 +199,10 @@ ul {
 
 .stables > h3 {
   font-size: 2.5rem;
+}
+
+#scratch_prompt, #scratch_process {
+  display: none;
+  grid-column: 1 / 3;
+  margin: auto;
 }

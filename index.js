@@ -27,40 +27,53 @@ var nomOpen;
 
 io.on('connection', function (socket) {
   var addedUser = false;
-
-
-  
   
   // Take in the number of horses entered and puts into array, sets user bankrolls, removes remaining numbers
   socket.on('loadList', (data) => {
     removeNum = data;
     userBankrolls = [100, 100];
     enteredList = [];
-    nomOpen = true;
+    nomOpen = 'closed';
     for (var i = 0; i < removeNum; i++){
       enteredList[i] = i+1;
     }
     io.emit('removeHorses', {
       removeNum: removeNum,
-      usernumber: socket.usernumber,
-      thatarray: enteredList,
-      firstbid: usersList[0]
     });
   });
   
+  socket.on('scratchGood', (data) => {
+    nomOpen = 'open';
+    io.emit('auctionTime', {firstbid: usersList[0]});
+  });
+  
+  socket.on('scratches', (data) =>{
+    nomOpen = 'scratch';
+    io.emit('scratchTime', {});
+  });
+  
+  socket.on('rmvscratch', (data) =>{
+    
+  });
+  
   socket.on('currentnom', (data) => {
-    if(nomOpen == true){
+    if(nomOpen == 'open'){
       // First we take out the nominated horse from the unusedList array above
       let dataV = parseInt(data);
       indexRem = enteredList.indexOf(dataV);
          enteredList.splice(indexRem, 1);
       // Then we send the nominated horses number (value) to all sockets
       let dataUp = data;
-      nomOpen = false;
+      nomOpen = 'closed';
       io.emit('nommove', {dataUp: dataUp, thatarray: enteredList});
-    } else if(nomOpen == false){
+    } else if(nomOpen == 'closed'){
       io.emit('doubleNom', {msg: `A horse has already been nominated.`});
-    } else {}
+    } else if(nomOpen == 'scratch'){
+      let dataNum = parseInt(data);
+    indexRem = enteredList.indexOf(dataNum);
+    enteredList.splice(indexRem, 1);
+    io.emit('removeScratches', {horse: dataNum, elist: enteredList});
+    }
   });
   
   // This is done when both users are logged in
@@ -98,7 +111,7 @@ io.on('connection', function (socket) {
         var bid2 = parseInt(bidList.u2);
         if (bid1 > bid2){
           userBankrolls[0] = userBankrolls[0] - bid1;
-          nomOpen = true;
+          nomOpen = 'open';
           io.emit('test_bid',{
             user: usersList[0],
             msg: " had the winning bid at $",
@@ -118,7 +131,7 @@ io.on('connection', function (socket) {
           }
         } else if (bid2 > bid1){
           userBankrolls[1] = userBankrolls[1] - bid2;
-          nomOpen = true;
+          nomOpen = 'open';
           io.emit('test_bid',{
             user: usersList[1],
             msg: " had the winning bid at $",
